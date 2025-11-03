@@ -1081,6 +1081,9 @@ MonoBehaviour:
   _currentRotationValue: 0
   _maxRotationValue: 1
   _minRotationValue: 0
+  _stepped: 0
+  _steps: 6
+  _stepThreshold: 0.2
 --- !u!1 &2119348676
 GameObject:
   m_ObjectHideFlags: 0
