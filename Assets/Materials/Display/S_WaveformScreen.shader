@@ -7,6 +7,8 @@ Shader "Custom/S_WaveformScreenShader_Lit"
         _WaveAmplitude("Wave Amplitude", Float) = 0.3
         _WaveFrequency("Wave Frequency", Float) = 2.0
         _WaveType("Wave Type (0=Sine, 1=Square, 2=Triangle, 3=Sawtooth)", Float) = 0
+        _WaveOffsetX("Wave Offset X", Float) = 0.0
+        _WaveOffsetY("Wave Offset Y", Float) = 0.0
     }
 
     SubShader
@@ -49,6 +51,8 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 float _WaveAmplitude;
                 float _WaveFrequency;
                 float _WaveType;
+                float _WaveOffsetX;
+                float _WaveOffsetY;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -64,7 +68,7 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 float thickness = 0.02;
                 float speed = 1.0;
 
-                float x = IN.uv.x;
+                float x = IN.uv.x + _WaveOffsetX;
                 float y = IN.uv.y;
                 float t = _Time.y;
 
@@ -77,34 +81,33 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 if (_WaveType < 0.5)
                 {
                     // Sine wave
-                    waveY = 0.5 + _WaveAmplitude * sin(phase);
+                    waveY = 0.5 + _WaveAmplitude * sin(phase) + _WaveOffsetY;
                     alpha = smoothstep(thickness, 0.0, abs(y - waveY));
                 }
                 else if (_WaveType < 1.5)
                 {
                     // Smoothed square wave
                     float s = sin(phase);
-                    // Use smoothstep to create a ramp between -1 and 1
                     float sq = lerp(-1.0, 1.0, smoothstep(-epsilon, epsilon, s));
-                    waveY = 0.5 + _WaveAmplitude * sq;
+                    waveY = 0.5 + _WaveAmplitude * sq + _WaveOffsetY;
                     alpha = smoothstep(thickness, 0.0, abs(y - waveY));
                 }
                 else if (_WaveType < 2.5)
                 {
                     // Triangle wave
-                    waveY = 0.5 + _WaveAmplitude * (abs(frac(phase / 6.2831853) * 2.0 - 1.0) * 2.0 - 1.0);
+                    waveY = 0.5 + _WaveAmplitude * (abs(frac(phase / 6.2831853) * 2.0 - 1.0) * 2.0 - 1.0) + _WaveOffsetY;
                     alpha = smoothstep(thickness, 0.0, abs(y - waveY));
                 }
                 else
                 {
-                    // Sawtooth wave (smooth wrap-around, never cut)
+                    // Sawtooth wave
                     float saw = frac(phase / 6.2831853);
                     float st = saw * 2.0 - 1.0;
                     float leftBlend = smoothstep(0.0, epsilon, saw);
                     float rightBlend = 1.0 - smoothstep(1.0 - epsilon, 1.0, saw);
                     float blend = leftBlend * rightBlend;
                     st = lerp(-1.0, st, blend);
-                    waveY = 0.5 + _WaveAmplitude * st;
+                    waveY = 0.5 + _WaveAmplitude * st + _WaveOffsetY;
                     alpha = smoothstep(thickness, 0.0, abs(y - waveY));
                 }
 
