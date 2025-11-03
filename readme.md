@@ -2,7 +2,7 @@ Radio game mechains:
 * 5 different controlls
     * amplitude
     * frequency
-    * waveform
+    * waveform (sin, square, triangle, saw)
     * x-offset
     * y-offset
 * 4 lights for button sequence
