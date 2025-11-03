@@ -95,7 +95,12 @@ public class KnobBehaviour : MonoBehaviour, IControl
             transform.localRotation = Quaternion.Euler(euler);
         }
     }
-    
+
+    public float GetValue()
+    {
+        return _currentRotationValue;
+    }
+
     [Serializable]
     public enum RotationAxis
     {

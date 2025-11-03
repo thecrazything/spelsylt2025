@@ -38,6 +38,11 @@ public class SliderBehaviour : MonoBehaviour, IControl
         transform.localPosition = localPosition;
     }
 
+    public float GetValue()
+    {
+        return _currentValue;
+    }
+
     [Serializable]
     public enum SliderAxis
     {
