@@ -33,7 +33,7 @@ Material:
     - _WaveFrequency: 2.77
     - _WaveOffsetX: 0
     - _WaveOffsetY: 0
-    - _WaveType: 1
+    - _WaveType: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 0.80818605, b: 0, a: 1}
   m_BuildTextureStacks: []

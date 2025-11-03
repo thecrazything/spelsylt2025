@@ -4,6 +4,7 @@ public class WaveformController : MonoBehaviour
 {
 
     [SerializeField] private Renderer _screen;
+    [SerializeField] private Color _baseColor = Color.green;
 
     private Material _screenWaveformMaterial;
 
@@ -11,6 +12,7 @@ public class WaveformController : MonoBehaviour
     void Start()
     {
         _screenWaveformMaterial = _screen.material;
+        _screenWaveformMaterial.SetColor("_BaseColor", _baseColor);
     }
 
     // Update is called once per frame
