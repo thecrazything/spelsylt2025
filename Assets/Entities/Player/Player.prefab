@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5499515848991695989}
   - component: {fileID: 1072262142165534873}
+  - component: {fileID: 7412370220103369770}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -44,3 +45,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2bb307d7500eb8499cec52ffcc537e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SittingPlayerController
+  _playerCamera: {fileID: 0}
+  _headMoveSensitivity: 0.5
+  _maxHeadAngle: 10
+--- !u!114 &7412370220103369770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156172313360814208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad8a1d2d2f241a44b55a262183a8d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseInteractionController

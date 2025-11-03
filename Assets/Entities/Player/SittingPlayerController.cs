@@ -7,6 +7,8 @@ public class SittingPlayerController : MonoBehaviour
     [SerializeField] private float _headMoveSensitivity = 0.5f;
     [SerializeField] private float _maxHeadAngle = 10f;
 
+    private bool _lockedCursor = false;
+
     void Update()
     {
         MoveCamera();
@@ -14,6 +16,7 @@ public class SittingPlayerController : MonoBehaviour
 
     private void MoveCamera()
     {
+        if (_lockedCursor) return;
         if (Mouse.current == null) return;
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
@@ -28,5 +31,11 @@ public class SittingPlayerController : MonoBehaviour
         float yRot = normalized.x * _maxHeadAngle * _headMoveSensitivity;
 
         _playerCamera.transform.localRotation = Quaternion.Euler(xRot, yRot, 0f);
+    }
+
+    public void SetLocked(bool locked)
+    {
+        _lockedCursor = locked;
+        Cursor.visible = !locked;
     }
 }
