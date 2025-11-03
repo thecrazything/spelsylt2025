@@ -10,3 +10,6 @@ Radio game mechains:
 * button to "lock in" when signal is close enough
 * input sequence board
     * Press buttons in the same order as the lights
+
+
+Player sits at desk with everything in front of them
