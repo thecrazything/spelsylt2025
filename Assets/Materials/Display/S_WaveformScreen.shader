@@ -65,7 +65,7 @@ Shader "Custom/S_WaveformScreenShader_Lit"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float thickness = 0.02;
+                float thickness = 0.01;
                 float speed = 1.0;
 
                 float x = IN.uv.x + _WaveOffsetX;
@@ -77,26 +77,34 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 float alpha = 0.0;
 
                 float epsilon = 0.05; // Smoothing window for transitions
+                
+                // Calculate derivative for all wave types
+                float dx = 0.001;
+                float phaseNext = (x + dx) * _WaveFrequency * 6.2831853 + t * speed;
+                float waveYNext = 0.0;
 
                 if (_WaveType < 0.5)
                 {
                     // Sine wave
                     waveY = 0.5 + _WaveAmplitude * sin(phase) + _WaveOffsetY;
-                    alpha = smoothstep(thickness, 0.0, abs(y - waveY));
+                    waveYNext = 0.5 + _WaveAmplitude * sin(phaseNext) + _WaveOffsetY;
                 }
                 else if (_WaveType < 1.5)
                 {
-                    // Smoothed square wave
+                    // Square wave
                     float s = sin(phase);
                     float sq = lerp(-1.0, 1.0, smoothstep(-epsilon, epsilon, s));
                     waveY = 0.5 + _WaveAmplitude * sq + _WaveOffsetY;
-                    alpha = smoothstep(thickness, 0.0, abs(y - waveY));
+                    
+                    float sNext = sin(phaseNext);
+                    float sqNext = lerp(-1.0, 1.0, smoothstep(-epsilon, epsilon, sNext));
+                    waveYNext = 0.5 + _WaveAmplitude * sqNext + _WaveOffsetY;
                 }
                 else if (_WaveType < 2.5)
                 {
                     // Triangle wave
                     waveY = 0.5 + _WaveAmplitude * (abs(frac(phase / 6.2831853) * 2.0 - 1.0) * 2.0 - 1.0) + _WaveOffsetY;
-                    alpha = smoothstep(thickness, 0.0, abs(y - waveY));
+                    waveYNext = 0.5 + _WaveAmplitude * (abs(frac(phaseNext / 6.2831853) * 2.0 - 1.0) * 2.0 - 1.0) + _WaveOffsetY;
                 }
                 else
                 {
@@ -108,7 +116,33 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                     float blend = leftBlend * rightBlend;
                     st = lerp(-1.0, st, blend);
                     waveY = 0.5 + _WaveAmplitude * st + _WaveOffsetY;
-                    alpha = smoothstep(thickness, 0.0, abs(y - waveY));
+                    
+                    float sawNext = frac(phaseNext / 6.2831853);
+                    float stNext = sawNext * 2.0 - 1.0;
+                    float leftBlendNext = smoothstep(0.0, epsilon, sawNext);
+                    float rightBlendNext = 1.0 - smoothstep(1.0 - epsilon, 1.0, sawNext);
+                    float blendNext = leftBlendNext * rightBlendNext;
+                    stNext = lerp(-1.0, stNext, blendNext);
+                    waveYNext = 0.5 + _WaveAmplitude * stNext + _WaveOffsetY;
+                }
+
+                // Calculate wave bounds
+                float waveTop = 0.5 + _WaveAmplitude + _WaveOffsetY;
+                float waveBottom = 0.5 - _WaveAmplitude + _WaveOffsetY;
+                
+                // Only calculate line distance if we're within the wave's Y bounds
+                if (y >= waveBottom && y <= waveTop)
+                {
+                    // Calculate slope
+                    float slope = (waveYNext - waveY) / dx;
+                    
+                    // Clamp slope to prevent infinite lines
+                    slope = clamp(slope, -100.0, 100.0);
+                    
+                    // Point to line distance formula with clamped slope
+                    float lineDistance = abs(slope * x - y + (waveY - slope * x)) / sqrt(slope * slope + 1.0);
+                    
+                    alpha = smoothstep(thickness, 0.0, lineDistance);
                 }
 
                 SurfaceData surfaceData;
@@ -117,7 +151,7 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 surfaceData.specular              = 0.0;
                 surfaceData.smoothness            = 0.0;
                 surfaceData.normalTS              = float3(0, 0, 1);
-                surfaceData.emission              = _BaseColor.rgb * alpha * 100;
+                surfaceData.emission              = _BaseColor.rgb * alpha * 10;
                 surfaceData.occlusion             = 1.0;
                 surfaceData.alpha                 = alpha * _BaseColor.a;
                 surfaceData.clearCoatMask         = 0.0;

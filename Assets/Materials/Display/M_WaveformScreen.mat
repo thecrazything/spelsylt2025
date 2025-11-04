@@ -29,11 +29,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _WaveAmplitude: 0.11
-    - _WaveFrequency: 2.77
+    - _WaveAmplitude: 0.3
+    - _WaveFrequency: 2.07
     - _WaveOffsetX: 0
     - _WaveOffsetY: 0
-    - _WaveType: 0
+    - _WaveType: 1.1
     m_Colors:
     - _BaseColor: {r: 1, g: 0.80818605, b: 0, a: 1}
   m_BuildTextureStacks: []
