@@ -13,7 +13,7 @@ public class WaveformController : MonoBehaviour
     void Start()
     {
         _screenWaveformMaterial = _screen.material;
-        _screenWaveformMaterial.SetColor("_BaseColor", _baseColor);
+
         if (_model != null)
         {
             SetAmplitude(_model.Amplitude);
@@ -21,6 +21,10 @@ public class WaveformController : MonoBehaviour
             SetType(_model.Type);
             SetXOffset(_model.XOffset);
             SetYOffset(_model.YOffset);
+        }
+        else
+        {
+            _screenWaveformMaterial.SetColor("_BaseColor", _baseColor);
         }
     }
 
