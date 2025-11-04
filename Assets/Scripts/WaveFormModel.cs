@@ -28,7 +28,7 @@ public class WaveFormModel
         return new WaveFormModel
         {
             Frequency = Random.Range(0.1f, 5.0f),
-            Amplitude = Random.Range(0.0f, 1.0f),
+            Amplitude = Random.Range(0.0f, 0.5f),
             Type = Random.Range(0, 4),
             XOffset = Random.Range(-0.25f, 0.25f),
             YOffset = Random.Range(-0.25f, 0.25f)

@@ -153,7 +153,7 @@ Shader "Custom/S_WaveformScreenShader_Lit"
                 surfaceData.normalTS              = float3(0, 0, 1);
                 surfaceData.emission              = _BaseColor.rgb * alpha * 10;
                 surfaceData.occlusion             = 1.0;
-                surfaceData.alpha                 = alpha * _BaseColor.a;
+                surfaceData.alpha                 = alpha;
                 surfaceData.clearCoatMask         = 0.0;
                 surfaceData.clearCoatSmoothness   = 0.0;
 
