@@ -7,6 +7,7 @@ public class WaveformController : MonoBehaviour
     [SerializeField] private Color _baseColor = Color.green;
 
     private Material _screenWaveformMaterial;
+    private WaveFormModel _model = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,12 +55,22 @@ public class WaveformController : MonoBehaviour
             _screenWaveformMaterial.SetFloat("_WaveOffsetX", xOffset);
         }
     }
-    
+
     public void SetYOffset(float yOffset)
     {
         if (_screenWaveformMaterial != null)
         {
             _screenWaveformMaterial.SetFloat("_WaveOffsetY", yOffset);
         }
+    }
+
+    public void SetWaveform(WaveFormModel waveform)
+    {
+        _model = waveform;
+        SetAmplitude(waveform.Amplitude);
+        SetFrequency(waveform.Frequency);
+        SetType(waveform.Type);
+        SetXOffset(waveform.XOffset);
+        SetYOffset(waveform.YOffset);
     }
 }
