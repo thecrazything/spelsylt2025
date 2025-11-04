@@ -14,6 +14,14 @@ public class WaveformController : MonoBehaviour
     {
         _screenWaveformMaterial = _screen.material;
         _screenWaveformMaterial.SetColor("_BaseColor", _baseColor);
+        if (_model != null)
+        {
+            SetAmplitude(_model.Amplitude);
+            SetFrequency(_model.Frequency);
+            SetType(_model.Type);
+            SetXOffset(_model.XOffset);
+            SetYOffset(_model.YOffset);
+        }
     }
 
     // Update is called once per frame
@@ -67,10 +75,5 @@ public class WaveformController : MonoBehaviour
     public void SetWaveform(WaveFormModel waveform)
     {
         _model = waveform;
-        SetAmplitude(waveform.Amplitude);
-        SetFrequency(waveform.Frequency);
-        SetType(waveform.Type);
-        SetXOffset(waveform.XOffset);
-        SetYOffset(waveform.YOffset);
     }
 }

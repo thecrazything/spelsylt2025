@@ -9,15 +9,6 @@ public class WaveFormModel
     public float XOffset { get; set; }
     public float YOffset { get; set; }
 
-    public WaveFormModel()
-    {
-        Frequency = 1.0f;
-        Amplitude = 0.5f;
-        Type = 0;
-        XOffset = 0.0f;
-        YOffset = 0.0f;
-    }
-
     bool[] equals(WaveFormModel other)
     {
         const float epsilon = 0.01f; // TODO adjust as needed for matching accuracy
@@ -39,8 +30,8 @@ public class WaveFormModel
             Frequency = Random.Range(0.1f, 5.0f),
             Amplitude = Random.Range(0.0f, 1.0f),
             Type = Random.Range(0, 4),
-            XOffset = Random.Range(0.0f, 2.0f),
-            YOffset = Random.Range(0.0f, 2.0f)
+            XOffset = Random.Range(-0.25f, 0.25f),
+            YOffset = Random.Range(-0.25f, 0.25f)
         };
     }
 
