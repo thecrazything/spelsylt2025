@@ -4,4 +4,7 @@ public interface IControl
 {
     public void OnDrag(float deltaX, float deltaY);
     public float GetValue();
+
+    public void OnMousePressStart();
+    public void OnMousePressEnd();
 }

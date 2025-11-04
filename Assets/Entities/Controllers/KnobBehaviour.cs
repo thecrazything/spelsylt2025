@@ -37,7 +37,7 @@ public class KnobBehaviour : MonoBehaviour, IControl
 
             if (_stepAccumulator > _stepThreshold)
             {
-                if (_currentStep < _steps - 1)
+                if (_currentStep < _steps)
                     _currentStep++;
                 _stepAccumulator = 0f;
             }
@@ -48,7 +48,7 @@ public class KnobBehaviour : MonoBehaviour, IControl
                 _stepAccumulator = 0f;
             }
 
-            float stepPercentage = (float)_currentStep / (_steps - 1);
+            float stepPercentage = (float)_currentStep / (_steps);
             float targetRotation = Mathf.Lerp(_minRotation, _maxRotation, stepPercentage);
 
             Vector3 euler = transform.localEulerAngles;
@@ -99,6 +99,16 @@ public class KnobBehaviour : MonoBehaviour, IControl
     public float GetValue()
     {
         return _currentRotationValue;
+    }
+
+    public void OnMousePressStart()
+    {
+
+    }
+
+    public void OnMousePressEnd()
+    {
+
     }
 
     [Serializable]

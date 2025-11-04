@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
     [SerializeField] private Transform _waveDisplayLocation;
     [SerializeField] private GameObject _waveDispalyPrefab;
     [SerializeField]private int _currentLevel = 0;
@@ -14,6 +15,15 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         SetupNextWaveformSet();
     }
 
@@ -22,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
 
     }
-    
+
     public void SetupNextWaveformSet()
     {
         ClearCurrentWaveforms();
@@ -44,6 +54,41 @@ public class GameManager : MonoBehaviour
             controller.SetWaveform(waveform);
             _currentWaveforms.Add(controller);
         });
+    }
+    
+    public WaveFormModel GetClosestMatch(WaveFormModel other)
+    {
+        WaveFormModel closest = null;
+        bool[] closetsMatching = null;
+        _currentWaveforms.ForEach(waveform =>
+        {
+            var model = waveform.Model;
+            var match = model.Matches(other);
+            if (closest == null)
+            {
+                closest = model;
+                closetsMatching = match;
+            }
+            else
+            {
+                int currentMatchCount = 0;
+                int closestMatchCount = 0;
+                foreach (var m in match)
+                {
+                    if (m) currentMatchCount++;
+                }
+                foreach (var m in closetsMatching)
+                {
+                    if (m) closestMatchCount++;
+                }
+                if (currentMatchCount > closestMatchCount)
+                {
+                    closest = model;
+                    closetsMatching = match;
+                }
+            }
+        });
+        return closest;
     }
 
     private void ClearCurrentWaveforms()

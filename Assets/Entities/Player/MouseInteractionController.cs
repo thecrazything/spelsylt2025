@@ -30,7 +30,8 @@ public class MouseInteractionController : MonoBehaviour
                 {
                     activeControl = control;
                     savedCursorPosition = mousePosition;
-                     _sittingPlayerController.SetLocked(true);
+                    _sittingPlayerController.SetLocked(true);
+                    control.OnMousePressStart();
                 }
             }
         }
@@ -49,6 +50,7 @@ public class MouseInteractionController : MonoBehaviour
 
         if (activeControl != null && Mouse.current.leftButton.wasReleasedThisFrame)
         {
+            activeControl.OnMousePressEnd();
             activeControl = null;
             Mouse.current.WarpCursorPosition(savedCursorPosition);
             StartCoroutine(UnlockPlayer()); // wait a frame before unlocking player, prevents flicker

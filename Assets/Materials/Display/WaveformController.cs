@@ -8,6 +8,7 @@ public class WaveformController : MonoBehaviour
 
     private Material _screenWaveformMaterial;
     private WaveFormModel _model = null;
+    public WaveFormModel Model => _model;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

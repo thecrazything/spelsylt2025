@@ -43,6 +43,16 @@ public class SliderBehaviour : MonoBehaviour, IControl
         return _currentValue;
     }
 
+    public void OnMousePressStart()
+    {
+
+    }
+
+    public void OnMousePressEnd()
+    {
+
+    }
+
     [Serializable]
     public enum SliderAxis
     {

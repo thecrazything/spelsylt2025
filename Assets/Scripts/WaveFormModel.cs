@@ -9,7 +9,7 @@ public class WaveFormModel
     public float XOffset { get; set; }
     public float YOffset { get; set; }
 
-    bool[] equals(WaveFormModel other)
+    public bool[] Matches(WaveFormModel other)
     {
         const float epsilon = 0.01f; // TODO adjust as needed for matching accuracy
         return new bool[]
