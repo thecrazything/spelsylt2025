@@ -20,14 +20,14 @@ public class ToggleBehaviour : MonoBehaviour, IControl
     {
         if (_isSpinning)
         {
-            float target = _spinToOn ? _rotationDistance : 0f;
+            float target = _spinToOn ? -_rotationDistance : 0f;
 
             // Move towards target rotation
             _currentRotation = Mathf.MoveTowards(_currentRotation, target, _rotationSpeed * Time.deltaTime);
             SetRotation(_currentRotation);
 
             // Check if reached target
-            if (_spinToOn && Mathf.Approximately(_currentRotation, _rotationDistance))
+            if (_spinToOn && Mathf.Approximately(_currentRotation, -_rotationDistance))
             {
                 _isOn = true;
                 _isSpinning = false;
@@ -36,6 +36,10 @@ public class ToggleBehaviour : MonoBehaviour, IControl
             {
                 _isOn = false;
                 _isSpinning = false;
+            }
+            else
+            {
+                _isOn = false;
             }
         }
     }

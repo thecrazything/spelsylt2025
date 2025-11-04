@@ -3,10 +3,13 @@ using UnityEngine;
 public class TestRadio : MonoBehaviour
 {
     public KnobBehaviour frequencyControl;
-    public SliderBehaviour amplitudeControl;
+    public KnobBehaviour amplitudeControl;
     public KnobBehaviour typeControl;
 
     public WaveformController waveformController;
+
+    public SliderBehaviour offsetXControl;
+    public SliderBehaviour offsetYControl;
 
     public IndicatorLight frequencyMatchLight;
     public IndicatorLight amplitudeMatchLight;
@@ -27,6 +30,8 @@ public class TestRadio : MonoBehaviour
         waveformController.SetFrequency(frequencyControl.GetValue());
         waveformController.SetAmplitude(amplitudeControl.GetValue());
         waveformController.SetType((int)typeControl.GetValue());
+        waveformController.SetXOffset(offsetXControl.GetValue());
+        waveformController.SetYOffset(offsetYControl.GetValue());
 
         if (key.GetValue() > 0f)
         {
