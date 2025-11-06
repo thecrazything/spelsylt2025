@@ -11,7 +11,7 @@ public class WaveFormModel
 
     public bool[] Matches(WaveFormModel other)
     {
-        const float epsilon = 0.05f; // TODO adjust as needed for matching accuracy
+        const float epsilon = 0.02f; // TODO adjust as needed for matching accuracy
         return new bool[]
         {
             Mathf.Abs(Frequency - other.Frequency) < epsilon,

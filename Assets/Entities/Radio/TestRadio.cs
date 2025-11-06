@@ -18,6 +18,8 @@ public class TestRadio : MonoBehaviour
     public IndicatorLight offsetYMatchLight;
     public ToggleBehaviour key;
 
+    public RadioSound sound;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,19 +35,13 @@ public class TestRadio : MonoBehaviour
         waveformController.SetXOffset(offsetXControl.GetValue());
         waveformController.SetYOffset(offsetYControl.GetValue());
 
-        if (key.GetValue() > 0f)
-        {
-            TurnOnMatcherLights();
-        }
-        else
-        {
-            TurnOffMatcherLights();
-        }
+        WaveFormModel testModel = GetTempWaveformModel();
+        TurnOnMatcherLights(testModel);
+        sound.model = testModel;
     }
 
-    public void TurnOnMatcherLights()
+    public void TurnOnMatcherLights(WaveFormModel testModel)
     {
-        WaveFormModel testModel = GetTempWaveformModel();
         WaveFormModel targetModel = GameManager.Instance.GetClosestMatch(testModel);
 
         bool[] matches = testModel.Matches(targetModel);
@@ -72,7 +68,8 @@ public class TestRadio : MonoBehaviour
         model.Frequency = frequencyControl.GetValue();
         model.Amplitude = amplitudeControl.GetValue();
         model.Type = (int)typeControl.GetValue();
-        // TODO add x and y
+        model.XOffset = offsetXControl.GetValue();
+        model.YOffset = offsetYControl.GetValue();
         return model;
     }
 }
