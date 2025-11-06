@@ -99,4 +99,20 @@ public class GameManager : MonoBehaviour
         });
         _currentWaveforms.Clear();
     }
+
+    internal void TurnOffAllWaveforms()
+    {
+        _currentWaveforms.ForEach(waveform =>
+        {
+            waveform.gameObject.SetActive(false);
+        });
+    }
+
+    internal void TurnOnAllWaveforms()
+    {
+        _currentWaveforms.ForEach(waveform =>
+        {
+            waveform.gameObject.SetActive(true);
+        });
+    }
 }
