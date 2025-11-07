@@ -164,6 +164,11 @@ Shader "Custom/S_WaveformScreenShader_Lit"
 
                 half4 color = UniversalFragmentPBR(inputData, surfaceData);
 
+                // --- Scanlines effect ---
+                float scanlineFreq = 50.0; // Number of scanlines, tweak for your resolution
+                float scanline = 0.85 + 0.15 * sin(IN.uv.y * scanlineFreq * 3.14159); // 0.85 base, 0.15 darkening
+                color *= scanline;
+
                 return color;
             }
             ENDHLSL

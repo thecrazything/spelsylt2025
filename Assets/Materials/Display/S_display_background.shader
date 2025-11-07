@@ -113,6 +113,11 @@ Shader "Custom/S_display_background"
                 float greenGlow = 0.07 * vignette;
                 colorOut += float3(0.15, 0.35, 0.15) * greenGlow;
 
+                // --- Scanlines effect ---
+                float scanlineFreq = 50.0; // Number of scanlines, tweak for your resolution
+                float scanline = 0.85 + 0.15 * sin(uvWobble.y * scanlineFreq * 3.14159); // 0.85 base, 0.15 darkening
+                colorOut *= scanline;
+
                 return half4(colorOut, 1);
             }
             ENDHLSL
