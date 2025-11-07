@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 5111436896568547569}
   - component: {fileID: 7245003466760284650}
   - component: {fileID: 5596855530227733415}
+  - component: {fileID: 1203771959879172543}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -241,6 +242,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1203771959879172543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5914268756923018623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a32795f7d42ed9448532cca7d634ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenBackground
 --- !u!1001 &3132384786200329580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -739,6 +752,9 @@ MonoBehaviour:
   matcherButton: {fileID: 8229088069194485296}
   matcherLight: {fileID: 0}
   sound: {fileID: 2129066231642035864}
+  screenLightA: {fileID: 0}
+  screenLightB: {fileID: 0}
+  screenBackground: {fileID: 1203771959879172543}
   IsOn: 1
 --- !u!114 &2129066231642035864
 MonoBehaviour:
@@ -1209,7 +1225,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7452378623961448663, guid: 99fbb86415a60fd43a8eec4fd29676d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5063175960554538175}
   m_SourcePrefab: {fileID: 100100000, guid: 99fbb86415a60fd43a8eec4fd29676d0, type: 3}
 --- !u!4 &305917405607941214 stripped
 Transform:
@@ -1227,3 +1246,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5c08e51418c98246b4f58a734042c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveformCotnroller
+--- !u!1 &4581631818670629337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7452378623961448663, guid: 99fbb86415a60fd43a8eec4fd29676d0, type: 3}
+  m_PrefabInstance: {fileID: 6411176446392443150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5063175960554538175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4581631818670629337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a32795f7d42ed9448532cca7d634ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenBackground

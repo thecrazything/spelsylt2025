@@ -28,6 +28,11 @@ public class TestRadio : MonoBehaviour
 
     public RadioSound sound;
 
+    public Light screenLightA;
+    public Light screenLightB;
+
+    public ScreenBackground screenBackground;
+
     public bool IsOn = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -88,6 +93,9 @@ public class TestRadio : MonoBehaviour
         GameManager.Instance.TurnOffAllWaveforms();
         powerLight.SetIsOn(false);
         matcherLight.SetIsOn(false);
+        screenLightA.enabled = false;
+        screenLightB.enabled = false;
+        screenBackground.SetIsOn(false);
     }
 
     public void TurnOn()
@@ -99,6 +107,9 @@ public class TestRadio : MonoBehaviour
         waveformController.gameObject.SetActive(true);
         GameManager.Instance.TurnOnAllWaveforms();
         powerLight.SetIsOn(true);
+        screenLightA.enabled = true;
+        screenLightB.enabled = true;
+        screenBackground.SetIsOn(true);
     }
 
     public void TurnOnMatcherLights(WaveFormModel testModel)
