@@ -5,14 +5,15 @@ public class IndicatorLight : MonoBehaviour
     [SerializeField] private Color offColor = Color.red;
     [SerializeField] private Color onColor = Color.green;
     private Renderer lightRenderer;
-    private bool _isOn = false;
+    [SerializeField] private bool _isOn = false;
     private bool _state = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         lightRenderer = GetComponent<Renderer>();
-        lightRenderer.material.SetColor("_EmissionColor", _state ? onColor : offColor);
+        if (_isOn)
+            lightRenderer.material.SetColor("_EmissionColor", _state ? onColor : offColor);
     }
 
     // Update is called once per frame

@@ -24,6 +24,8 @@ public class TestRadio : MonoBehaviour
     public ButtonBehaviour powerButton;
     public ButtonBehaviour matcherButton;
 
+    public IndicatorLight matcherLight;
+
     public RadioSound sound;
 
     public bool IsOn = true;
@@ -31,7 +33,7 @@ public class TestRadio : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        matcherLight = matcherButton.GetComponent<IndicatorLight>();
     }
 
     // Update is called once per frame
@@ -58,6 +60,21 @@ public class TestRadio : MonoBehaviour
         WaveFormModel testModel = GetTempWaveformModel();
         TurnOnMatcherLights(testModel);
         sound.model = testModel;
+
+        WaveFormModel targetModel = GameManager.Instance.GetClosestMatch(testModel);
+        bool[] matches = testModel.Matches(targetModel);
+        if (matches[0] && matches[1] && matches[2] && matches[3] && matches[4])
+        {
+            matcherLight.SetIsOn(true);
+            if (matcherButton.GetValue() > 0f)
+            {
+                GameManager.Instance.SetupNextWaveformSet();
+            }
+        }
+        else
+        {
+            matcherLight.SetIsOn(false);
+        }
     }
 
     public void TurnOff()
@@ -70,6 +87,7 @@ public class TestRadio : MonoBehaviour
         waveformController.gameObject.SetActive(false);
         GameManager.Instance.TurnOffAllWaveforms();
         powerLight.SetIsOn(false);
+        matcherLight.SetIsOn(false);
     }
 
     public void TurnOn()
