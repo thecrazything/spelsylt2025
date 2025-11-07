@@ -71,7 +71,24 @@ Shader "Custom/S_display_background"
                     return half4(0,0,0,1);
                 }
 
-                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                // CRT degauss wobble effect (triggered at regular intervals)
+                float time = _Time.y;
+                float interval = 20.0; // seconds between degauss events
+                float degaussDuration = 0.7; // seconds effect lasts
+                float phase = fmod(time, interval);
+                float t = saturate(phase / degaussDuration);
+                float degaussStrength = (1.0 - t) * step(phase, degaussDuration);
+
+                float wobbleAmount = 0.02 * degaussStrength; // strong at start, fades out
+                float wobbleSpeed = 20.0;
+                float2 center = IN.uv - 0.5;
+                float dist = length(center) / 0.7071;
+                float edgeFactor = smoothstep(0.3, 1.0, dist);
+
+                float wobble = sin(time * wobbleSpeed + center.y * 20.0) * cos(time * wobbleSpeed * 0.7 + center.x * 20.0);
+                float2 uvWobble = IN.uv + center * wobble * wobbleAmount * edgeFactor;
+
+                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvWobble) * _BaseColor;
 
                 float3 normalWS = normalize(IN.normalWS);
                 Light mainLight = GetMainLight();
@@ -79,27 +96,20 @@ Shader "Custom/S_display_background"
                 float NdotL = saturate(dot(normalWS, -lightDir));
                 float3 litColor = color.rgb * (mainLight.color.rgb * NdotL);
 
-                float2 gridUV = IN.uv;
                 float gridSpacing = 0.1;
                 float gridThickness = 0.01;
 
-                float2 grid = abs(frac(gridUV / gridSpacing) - 0.5);
+                float2 grid = abs(frac(uvWobble / gridSpacing) - 0.5);
                 float gridLine = step(grid.x, gridThickness) + step(grid.y, gridThickness);
                 float lineIntensity = gridLine * 0.2;
 
-                // CRT vignette: brighter in center, fades at edges
-                float2 center = gridUV - 0.5;
-                float dist = length(center) / 0.7071;
                 float vignette = 1.0 - smoothstep(0.0, 1.0, dist);
-
-                // Apply vignette to grid lines
                 float fadedLineIntensity = lineIntensity * vignette;
 
                 float3 gridEmissive = float3(0.2, 0.8, 0.2) * fadedLineIntensity * _EmissiveStrength;
                 float3 finalColor = lerp(litColor, float3(0.2, 0.8, 0.2), fadedLineIntensity);
                 float3 colorOut = finalColor + gridEmissive;
 
-                // Subtle CRT green glow: faint green background, strongest in center
                 float greenGlow = 0.07 * vignette;
                 colorOut += float3(0.15, 0.35, 0.15) * greenGlow;
 
