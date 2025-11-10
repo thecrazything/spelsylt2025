@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     private List<WaveformController> _currentWaveforms = new List<WaveformController>();
 
+    private List<int> _solution = new List<int>();
+    private Queue<int> _solutionQueue = new Queue<int>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -46,14 +49,16 @@ public class GameManager : MonoBehaviour
         }
 
         List<WaveFormModel> waveforms = WaveFormModel.GetRandom(counts);
-
+        _solution.Clear();
         waveforms.ForEach(waveform =>
         {
             GameObject waveformObj = Instantiate(_waveDispalyPrefab, _waveDisplayLocation);
             WaveformController controller = waveformObj.GetComponent<WaveformController>();
             controller.SetWaveform(waveform);
             _currentWaveforms.Add(controller);
+            _solution.Add(UnityEngine.Random.Range(0, 10));
         });
+        _solutionQueue = new Queue<int>(_solution);
     }
     
     public WaveFormModel GetClosestMatch(WaveFormModel other)
@@ -114,5 +119,13 @@ public class GameManager : MonoBehaviour
         {
             waveform.gameObject.SetActive(true);
         });
+    }
+
+    internal int ClearWaveform(WaveFormModel targetModel)
+    {
+        WaveformController controller = _currentWaveforms.Find(waveform => waveform.Model == targetModel);
+        Destroy(controller.gameObject);
+        _currentWaveforms.Remove(controller);
+        return _solutionQueue.Dequeue();
     }
 }

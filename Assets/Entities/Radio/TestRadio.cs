@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TestRadio : MonoBehaviour
@@ -35,10 +36,42 @@ public class TestRadio : MonoBehaviour
 
     public bool IsOn = true;
 
+    public TubeLLight tubeLight1;
+    public TubeLLight tubeLight2;
+    public TubeLLight tubeLight3;
+    public TubeLLight tubeLight4;
+    public TubeLLight tubeLight5;
+    public TubeLLight tubeLight6;
+    public TubeLLight tubeLight7;
+    public TubeLLight tubeLight8;
+
+    public int?[] tubeLightTexts = new int?[]
+    {
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    };
+
+    private int _tubeLightIndex = 0;
+    private List<TubeLLight> _tubeLights = new List<TubeLLight>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         matcherLight = matcherButton.GetComponent<IndicatorLight>();
+        _tubeLights.Add(tubeLight1);
+        _tubeLights.Add(tubeLight2);
+        _tubeLights.Add(tubeLight3);
+        _tubeLights.Add(tubeLight4);
+        _tubeLights.Add(tubeLight5);
+        _tubeLights.Add(tubeLight6);
+        _tubeLights.Add(tubeLight7);
+        _tubeLights.Add(tubeLight8);
     }
 
     // Update is called once per frame
@@ -67,13 +100,19 @@ public class TestRadio : MonoBehaviour
         sound.model = testModel;
 
         WaveFormModel targetModel = GameManager.Instance.GetClosestMatch(testModel);
+        if (targetModel == null)
+            return;
         bool[] matches = testModel.Matches(targetModel);
         if (matches[0] && matches[1] && matches[2] && matches[3] && matches[4])
         {
             matcherLight.SetIsOn(true);
             if (matcherButton.GetValue() > 0f)
             {
-                GameManager.Instance.SetupNextWaveformSet();
+                int solution = GameManager.Instance.ClearWaveform(targetModel);
+                TubeLLight tubeLight = _tubeLights[_tubeLightIndex];
+                tubeLightTexts[_tubeLightIndex] = solution; // Store the solution for this tube light so we can restore when we turn on
+                tubeLight.SetNumber(solution);
+                _tubeLightIndex++;
             }
         }
         else
@@ -96,6 +135,14 @@ public class TestRadio : MonoBehaviour
         screenLightA.enabled = false;
         screenLightB.enabled = false;
         screenBackground.SetIsOn(false);
+        tubeLight1.TurnOff();
+        tubeLight2.TurnOff();
+        tubeLight3.TurnOff();
+        tubeLight4.TurnOff();
+        tubeLight5.TurnOff();
+        tubeLight6.TurnOff();
+        tubeLight7.TurnOff();
+        tubeLight8.TurnOff();
     }
 
     public void TurnOn()
@@ -110,6 +157,22 @@ public class TestRadio : MonoBehaviour
         screenLightA.enabled = true;
         screenLightB.enabled = true;
         screenBackground.SetIsOn(true);
+
+        for (int i = 0; i < 8; i++)
+        {
+            TubeLLight tubeLight = _tubeLights[i];
+            if (tubeLight != null)
+            {
+                if (tubeLightTexts[i] == null)
+                {
+                    tubeLight.TurnOff();
+                }
+                else
+                {
+                    tubeLight.SetNumber(tubeLightTexts[i].Value);
+                }
+            }
+        }
     }
 
     public void TurnOnMatcherLights(WaveFormModel testModel)
