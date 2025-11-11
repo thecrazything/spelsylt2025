@@ -8,9 +8,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform _waveDisplayLocation;
     [SerializeField] private GameObject _waveDispalyPrefab;
     [SerializeField]private int _currentLevel = 0;
-    [SerializeField] private int[] _levelWaveformCounts = { 1, 2, 4, 6, 8 };
+    [SerializeField] private int[] _levelWaveformCounts = { 1, 2, 2, 4, 8 };
+    [SerializeField] private int[] _levelCountdownTimes = { -1, -1, 60, 120, 240 };
 
     [SerializeField] private TestRadio _testRadio;
+    [SerializeField] private CountdownClock _countdownClock;
+    [SerializeField] private Light _warningLight;
+
+    [SerializeField] private float _coutdownValue = -1f;
+    [SerializeField] private bool _isCountdownActive = false;
 
     private List<WaveformController> _currentWaveforms = new List<WaveformController>();
 
@@ -35,7 +41,34 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (_isCountdownActive)
+        {
+            _warningLight.enabled = true;
+            _coutdownValue -= Time.deltaTime;
+            if (_coutdownValue <= 0f)
+            {
+                _coutdownValue = 0f;
+                _isCountdownActive = false;
+                _countdownClock.isOn = false;
+                Debug.Log("Countdown ended - player failed to complete in time");
+                _testRadio.TurnOff();
+                // TODO handle end of countdown (e.g. fail state)
+            }
+            if (_coutdownValue <= 60f)
+            {
+                _countdownClock.isOn = true;
+                _countdownClock.text.text = Mathf.CeilToInt(_coutdownValue).ToString();
+            }
+            else
+            {
+                _countdownClock.isOn = false;
+            }
+        }
+        else
+        {
+            _warningLight.enabled = false;
+            _countdownClock.isOn = false;
+        }
     }
 
     public void SetupNextWaveformSet()
@@ -43,13 +76,6 @@ public class GameManager : MonoBehaviour
         _testRadio.ResetSolutionState();
         ClearCurrentWaveforms();
         int counts = _levelWaveformCounts[_currentLevel];
-        _currentLevel++;
-
-        if (_currentLevel >= _levelWaveformCounts.Length)
-        {
-            _currentLevel = _levelWaveformCounts.Length - 1; // stay at max level
-            Debug.Log("Max level reached");
-        }
 
         List<WaveFormModel> waveforms = WaveFormModel.GetRandom(counts);
         _solution.Clear();
@@ -62,6 +88,25 @@ public class GameManager : MonoBehaviour
             _solution.Add(UnityEngine.Random.Range(0, 10));
         });
         _solutionQueue = new Queue<int>(_solution);
+
+        int countdownTime = _levelCountdownTimes[_currentLevel];
+        if (countdownTime > 0)
+        {
+            _isCountdownActive = true;
+            _coutdownValue = countdownTime;
+        }
+        else
+        {
+            _isCountdownActive = false;
+        }
+
+        _currentLevel++;
+
+        if (_currentLevel >= _levelWaveformCounts.Length)
+        {
+            _currentLevel = _levelWaveformCounts.Length - 1; // stay at max level
+            Debug.Log("Max level reached");
+        }
     }
     
     public WaveFormModel GetClosestMatch(WaveFormModel other)
