@@ -11,6 +11,8 @@ public class WaveFormModel
 
     public bool[] Matches(WaveFormModel other)
     {
+        if (other == null)
+            return new bool[] { false, false, false, false, false };
         const float epsilon = 0.02f; // TODO adjust as needed for matching accuracy
         return new bool[]
         {

@@ -75,4 +75,9 @@ public class SliderBehaviour : MonoBehaviour, IControl
         Y,
         Z
     }
+
+    public void ResetFrame()
+    {
+        // No per-frame state to reset for this control
+    }
 }

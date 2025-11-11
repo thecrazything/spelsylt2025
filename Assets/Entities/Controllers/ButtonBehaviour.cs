@@ -4,6 +4,8 @@ public class ButtonBehaviour : MonoBehaviour, IControl
 {
     [SerializeField] private bool _isToggle = false;
     public bool IsPressed = false;
+    private bool _pressedThisFrame = false;
+
     public void OnDrag(float deltaX, float deltaY)
     {
         // Buttons do not respond to drag events
@@ -11,7 +13,14 @@ public class ButtonBehaviour : MonoBehaviour, IControl
 
     public float GetValue()
     {
-        return IsPressed ? 1f : 0f;
+        if (_isToggle)
+        {
+            return IsPressed ? 1f : 0f;
+        }
+        else
+        {
+            return _pressedThisFrame ? 1f : 0f;
+        }
     }
 
     public void OnMousePressStart()
@@ -19,11 +28,14 @@ public class ButtonBehaviour : MonoBehaviour, IControl
         if (_isToggle)
         {
             IsPressed = !IsPressed;
-            return;
         }
         else
         {
-            IsPressed = true;
+            if (!IsPressed)
+            {
+                IsPressed = true;
+                _pressedThisFrame = true;
+            }
         }
     }
 
@@ -33,5 +45,10 @@ public class ButtonBehaviour : MonoBehaviour, IControl
         {
             IsPressed = false;
         }
+    }
+
+    public void ResetFrame()
+    {
+        _pressedThisFrame = false;
     }
 }

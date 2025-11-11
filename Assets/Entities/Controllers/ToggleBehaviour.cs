@@ -83,4 +83,9 @@ public class ToggleBehaviour : MonoBehaviour, IControl
         }
         transform.localRotation = Quaternion.Euler(euler);
     }
+
+    public void ResetFrame()
+    {
+        // No per-frame state to reset for this control
+    }
 }

@@ -37,14 +37,14 @@ public class KnobBehaviour : MonoBehaviour, IControl
 
             if (_stepAccumulator > _stepThreshold)
             {
-                if (_currentStep < _steps)
-                    _currentStep++;
+                if (_currentStep > 0)
+                    _currentStep--;
                 _stepAccumulator = 0f;
             }
             else if (_stepAccumulator < -_stepThreshold)
             {
-                if (_currentStep > 0)
-                    _currentStep--;
+                if (_currentStep < _steps)
+                    _currentStep++;
                 _stepAccumulator = 0f;
             }
 
@@ -117,5 +117,10 @@ public class KnobBehaviour : MonoBehaviour, IControl
         X,
         Y,
         Z
+    }
+
+    public void ResetFrame()
+    {
+        // No per-frame state to reset for this control
     }
 }

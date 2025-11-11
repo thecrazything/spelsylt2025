@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private int _currentLevel = 0;
     [SerializeField] private int[] _levelWaveformCounts = { 1, 2, 4, 6, 8 };
 
+    [SerializeField] private TestRadio _testRadio;
+
     private List<WaveformController> _currentWaveforms = new List<WaveformController>();
 
     private List<int> _solution = new List<int>();
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void SetupNextWaveformSet()
     {
+        _testRadio.ResetSolutionState();
         ClearCurrentWaveforms();
         int counts = _levelWaveformCounts[_currentLevel];
         _currentLevel++;
@@ -127,5 +130,19 @@ public class GameManager : MonoBehaviour
         Destroy(controller.gameObject);
         _currentWaveforms.Remove(controller);
         return _solutionQueue.Dequeue();
+    }
+
+    internal void SubmitInput(int[] inputBuffer)
+    {
+        for (int i = 0; i < _solution.Count; i++)
+        {
+            if (_solution[i] != inputBuffer[i])
+            {
+                Debug.Log("Incorrect code submitted");
+                return;
+            }
+        }
+        Debug.Log("Correct code submitted, advancing to next level");
+        SetupNextWaveformSet();
     }
 }

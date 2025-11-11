@@ -7,4 +7,6 @@ public interface IControl
 
     public void OnMousePressStart();
     public void OnMousePressEnd();
+
+    public void ResetFrame();
 }

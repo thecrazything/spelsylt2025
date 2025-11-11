@@ -121,6 +121,16 @@ public class TestRadio : MonoBehaviour
         }
     }
 
+    public void ResetSolutionState()
+    {
+        _tubeLightIndex = 0;
+        for (int i = 0; i < tubeLightTexts.Length; i++)
+        {
+            tubeLightTexts[i] = null;
+        }
+        _tubeLights.ForEach(tubeLight => tubeLight.TurnOff());
+    }
+
     public void TurnOff()
     {
         if (!IsOn)
@@ -135,14 +145,7 @@ public class TestRadio : MonoBehaviour
         screenLightA.enabled = false;
         screenLightB.enabled = false;
         screenBackground.SetIsOn(false);
-        tubeLight1.TurnOff();
-        tubeLight2.TurnOff();
-        tubeLight3.TurnOff();
-        tubeLight4.TurnOff();
-        tubeLight5.TurnOff();
-        tubeLight6.TurnOff();
-        tubeLight7.TurnOff();
-        tubeLight8.TurnOff();
+        _tubeLights.ForEach(tubeLight => tubeLight.TurnOff());
     }
 
     public void TurnOn()

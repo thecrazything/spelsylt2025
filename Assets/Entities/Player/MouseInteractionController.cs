@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MouseInteractionController : MonoBehaviour
 {
+    private List<IControl> touchedControllers = new List<IControl>();
     private IControl activeControl = null;
     private SittingPlayerController _sittingPlayerController;
     private Vector2 savedCursorPosition;
@@ -15,6 +17,8 @@ public class MouseInteractionController : MonoBehaviour
 
     void Update()
     {
+        touchedControllers.ForEach(controller => controller.ResetFrame());
+        touchedControllers.Clear();
         if (Mouse.current == null)
             return;
 
@@ -32,6 +36,7 @@ public class MouseInteractionController : MonoBehaviour
                     savedCursorPosition = mousePosition;
                     _sittingPlayerController.SetLocked(true);
                     control.OnMousePressStart();
+                    touchedControllers.Add(control);
                 }
             }
         }
