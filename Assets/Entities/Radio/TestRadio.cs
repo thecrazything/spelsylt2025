@@ -36,6 +36,8 @@ public class TestRadio : MonoBehaviour
 
     public bool IsOn = true;
 
+    public bool ForceOff = false;
+
     public TubeLLight tubeLight1;
     public TubeLLight tubeLight2;
     public TubeLLight tubeLight3;
@@ -77,7 +79,7 @@ public class TestRadio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (powerButton.GetValue() > 0f)
+        if (powerButton.GetValue() > 0f && !ForceOff)
         {
             TurnOn();
         }

@@ -17,9 +17,12 @@ public class KnobBehaviour : MonoBehaviour, IControl
     private float _stepAccumulator = 0f;
     [SerializeField] private float _stepThreshold = 0.01f;
 
+    private AudioSource _audioSource;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        TryGetComponent(out _audioSource);
         OnDrag(0, 0); // Zero out the rotation so it is in sync
     }
 
@@ -33,6 +36,7 @@ public class KnobBehaviour : MonoBehaviour, IControl
     {
         if (_stepped && _steps > 1)
         {
+            int lastStep = _currentStep;
             _stepAccumulator += deltaX * _rotationSpeed * Time.deltaTime;
 
             if (_stepAccumulator > _stepThreshold)
@@ -68,6 +72,11 @@ public class KnobBehaviour : MonoBehaviour, IControl
 
             // Also update _currentRotationValue for consistency
             _currentRotationValue = Mathf.Lerp(_minRotationValue, _maxRotationValue, stepPercentage);
+            if (lastStep != _currentStep && _audioSource != null)
+            {
+                _audioSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
+                _audioSource.Play();
+            }
         }
         else
         {

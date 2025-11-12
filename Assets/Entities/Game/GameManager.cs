@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private float _coutdownValue = -1f;
     [SerializeField] private bool _isCountdownActive = false;
+    [SerializeField] private AudioSource _gameOverAudioSource;
+    [SerializeField] private AudioSource _countdownAudioSource;
 
     private List<WaveformController> _currentWaveforms = new List<WaveformController>();
 
@@ -43,6 +45,10 @@ public class GameManager : MonoBehaviour
     {
         if (_isCountdownActive)
         {
+            if (!_countdownAudioSource.isPlaying)
+            {
+                _countdownAudioSource.Play();
+            }
             _warningLight.enabled = true;
             _coutdownValue -= Time.deltaTime;
             if (_coutdownValue <= 0f)
@@ -51,7 +57,9 @@ public class GameManager : MonoBehaviour
                 _isCountdownActive = false;
                 _countdownClock.isOn = false;
                 Debug.Log("Countdown ended - player failed to complete in time");
+                _testRadio.ForceOff = true;
                 _testRadio.TurnOff();
+                _gameOverAudioSource.Play();
                 // TODO handle end of countdown (e.g. fail state)
             }
             if (_coutdownValue <= 60f)
@@ -68,6 +76,10 @@ public class GameManager : MonoBehaviour
         {
             _warningLight.enabled = false;
             _countdownClock.isOn = false;
+            if (_countdownAudioSource.isPlaying)
+            {
+                _countdownAudioSource.Stop();
+            }
         }
     }
 
