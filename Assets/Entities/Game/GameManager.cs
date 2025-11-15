@@ -89,6 +89,9 @@ public class GameManager : MonoBehaviour
 
     public void SetupNextWaveformSet()
     {
+        _countdownAudioSource.Stop();
+        _warningLight.enabled = false;
+        _countdownClock.isOn = false;
         _testRadio.ResetSolutionState();
         ClearCurrentWaveforms();
         int counts = _levelWaveformCounts[_currentLevel];
