@@ -25,9 +25,12 @@ public class GameManager : MonoBehaviour
     private List<int> _solution = new List<int>();
     private Queue<int> _solutionQueue = new Queue<int>();
 
+    [SerializeField] private BlackoutBehaviour _blackoutBehaviour;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _blackoutBehaviour.FadeOut();
         if (Instance == null)
         {
             Instance = this;
@@ -60,6 +63,7 @@ public class GameManager : MonoBehaviour
                 _testRadio.ForceOff = true;
                 _testRadio.TurnOff();
                 _gameOverAudioSource.Play();
+                _blackoutBehaviour.FadeIn();
                 // TODO handle end of countdown (e.g. fail state)
             }
             if (_coutdownValue <= 60f)
